@@ -1157,7 +1157,7 @@
         .stat-icon.pending { background: rgba(239,68,68,0.12); color: var(--danger); }
         .stat-icon.proses { background: rgba(168,85,247,0.12); color: #a855f7; }
         .stat-icon.gotw { background: rgba(139,92,246,0.12); color: var(--gotw); }
-        .stat-icon.ready { background: rgba(245,158,11,0.12); color: var(--warning); }
+        .stat-icon.ready { background: rgba(16,185,129,0.12); color: var(--success); }
         .stat-value {
             font-size: 1.4rem;
             font-weight: 800;
@@ -1653,18 +1653,20 @@
             border: 1px solid rgba(168,85,247,0.2);
         }
         [data-theme="light"] .status-badge.proses { color: #9333ea; }
+        /* GOTW sekarang pakai warna kuning (sebelumnya warna READY) */
         .status-badge.gotw {
-            background: rgba(139,92,246,0.12);
-            color: #a78bfa;
-            border: 1px solid rgba(139,92,246,0.2);
-        }
-        [data-theme="light"] .status-badge.gotw { color: #7c3aed; }
-        .status-badge.ready {
             background: rgba(245,158,11,0.12);
             color: #fbbf24;
             border: 1px solid rgba(245,158,11,0.2);
         }
-        [data-theme="light"] .status-badge.ready { color: #d97706; }
+        [data-theme="light"] .status-badge.gotw { color: #d97706; }
+        /* READY sekarang pakai warna hijau */
+        .status-badge.ready {
+            background: rgba(16,185,129,0.12);
+            color: #34d399;
+            border: 1px solid rgba(16,185,129,0.2);
+        }
+        [data-theme="light"] .status-badge.ready { color: #059669; }
         .status-badge.finish {
             background: rgba(59,130,246,0.12);
             color: #60a5fa;
@@ -1678,8 +1680,8 @@
         }
         .status-badge.pending .status-dot { background: #f87171; }
         .status-badge.proses .status-dot { background: #c084fc; }
-        .status-badge.gotw .status-dot { background: #a78bfa; }
-        .status-badge.ready .status-dot { background: #fbbf24; }
+        .status-badge.gotw .status-dot { background: #fbbf24; }
+        .status-badge.ready .status-dot { background: #34d399; }
         .status-badge.finish .status-dot { background: #60a5fa; }
 
         /* ===== ACTION ===== */
@@ -1765,9 +1767,10 @@
             color: #c084fc;
         }
         .tracking-badge.gotw {
-            background: rgba(139,92,246,0.15);
-            color: #a78bfa;
+            background: rgba(245,158,11,0.15);
+            color: #fbbf24;
         }
+        [data-theme="light"] .tracking-badge.gotw { color: #d97706; }
         .tracking-badge.terima {
             background: rgba(16,185,129,0.15);
             color: #34d399;
@@ -1813,9 +1816,10 @@
             color: #c084fc;
         }
         .tracking-item .tracking-icon.gotw {
-            background: rgba(139,92,246,0.15);
-            color: #a78bfa;
+            background: rgba(245,158,11,0.15);
+            color: #fbbf24;
         }
+        [data-theme="light"] .tracking-item .tracking-icon.gotw { color: #d97706; }
         .tracking-item .tracking-icon.terima {
             background: rgba(16,185,129,0.15);
             color: #34d399;
@@ -2897,7 +2901,7 @@
         var STATUS_MAP = {
             'PENDING': { label: 'PENDING', icon: 'fa-clock', class: 'pending', color: '#f87171' },
             'PROSES': { label: 'PROSES', icon: 'fa-spinner', class: 'proses', color: '#c084fc' },
-            'GOTW': { label: 'GOTW', icon: 'fa-truck', class: 'gotw', color: '#a78bfa' },
+            'GOTW': { label: 'GOTW', icon: 'fa-truck', class: 'gotw', color: '#fbbf24' },
             'TERIMA': { label: 'TERIMA', icon: 'fa-check-circle', class: 'terima', color: '#34d399' }
         };
 
@@ -4833,8 +4837,8 @@
                         '') +
                     ' style="' + (canEdit ? 'cursor:text;' : '') + '">' +
                     escapeHtml(op || '-') + '</td>' +
-                    '<td class="' + cellClass + '" ' + editAction + o._docId + editActionClose + '>' + escapeHtml(k ||
-                        '-') +
+                    '<td class="' + cellClass + '" ' + editAction + o._docId + editActionClose + '>' + escapeHtml(k || -
+                        '') +
                     '</td>' +
                     '<td><div class="action-btns">' +
                     '<button class="action-btn' + btnEditClass + '" ' + editAction + o._docId +
@@ -5138,6 +5142,7 @@
         console.log('🗑️ Hover pesan untuk melihat tombol hapus (Admin only)');
         console.log('❌ Tombol Batal untuk membatalkan upload');
         console.log('🔄 Tracking TERIMA otomatis ubah status order menjadi READY');
+        console.log('🎨 READY → Hijau, GOTW → Kuning (sebelumnya warna READY)');
     </script>
 </body>
 </html>
