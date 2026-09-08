@@ -58,6 +58,12 @@
             --chat-file-bg: rgba(0, 212, 170, 0.05);
             --progress-bg: rgba(0, 212, 170, 0.1);
             --progress-fill: #00d4aa;
+            --ready-color: #10b981;
+            --ready-border: rgba(16, 185, 129, 0.2);
+            --ready-bg: rgba(16, 185, 129, 0.12);
+            --gotw-color: #fbbf24;
+            --gotw-border: rgba(251, 191, 36, 0.2);
+            --gotw-bg: rgba(251, 191, 36, 0.12);
         }
         [data-theme="light"] {
             --bg-primary: #f0f4f8;
@@ -100,6 +106,12 @@
             --chat-file-bg: rgba(13, 148, 136, 0.05);
             --progress-bg: rgba(13, 148, 136, 0.1);
             --progress-fill: #0d9488;
+            --ready-color: #059669;
+            --ready-border: rgba(5, 150, 105, 0.2);
+            --ready-bg: rgba(5, 150, 105, 0.12);
+            --gotw-color: #d97706;
+            --gotw-border: rgba(217, 119, 6, 0.2);
+            --gotw-bg: rgba(217, 119, 6, 0.12);
         }
         *, *::before, *::after {
             margin: 0;
@@ -1156,8 +1168,10 @@
         .stat-icon.total { background: rgba(0,212,170,0.12); color: var(--accent); }
         .stat-icon.pending { background: rgba(239,68,68,0.12); color: var(--danger); }
         .stat-icon.proses { background: rgba(168,85,247,0.12); color: #a855f7; }
-        .stat-icon.gotw { background: rgba(139,92,246,0.12); color: var(--gotw); }
-        .stat-icon.ready { background: rgba(245,158,11,0.12); color: var(--warning); }
+        /* READY → GREEN */
+        .stat-icon.ready { background: var(--ready-bg); color: var(--ready-color); }
+        /* GOTW → old READY color (amber) */
+        .stat-icon.gotw { background: var(--gotw-bg); color: var(--gotw-color); }
         .stat-value {
             font-size: 1.4rem;
             font-weight: 800;
@@ -1653,18 +1667,18 @@
             border: 1px solid rgba(168,85,247,0.2);
         }
         [data-theme="light"] .status-badge.proses { color: #9333ea; }
+        /* GOTW → old READY color (amber) */
         .status-badge.gotw {
-            background: rgba(139,92,246,0.12);
-            color: #a78bfa;
-            border: 1px solid rgba(139,92,246,0.2);
+            background: var(--gotw-bg);
+            color: var(--gotw-color);
+            border: 1px solid var(--gotw-border);
         }
-        [data-theme="light"] .status-badge.gotw { color: #7c3aed; }
+        /* READY → GREEN */
         .status-badge.ready {
-            background: rgba(245,158,11,0.12);
-            color: #fbbf24;
-            border: 1px solid rgba(245,158,11,0.2);
+            background: var(--ready-bg);
+            color: var(--ready-color);
+            border: 1px solid var(--ready-border);
         }
-        [data-theme="light"] .status-badge.ready { color: #d97706; }
         .status-badge.finish {
             background: rgba(59,130,246,0.12);
             color: #60a5fa;
@@ -1678,8 +1692,8 @@
         }
         .status-badge.pending .status-dot { background: #f87171; }
         .status-badge.proses .status-dot { background: #c084fc; }
-        .status-badge.gotw .status-dot { background: #a78bfa; }
-        .status-badge.ready .status-dot { background: #fbbf24; }
+        .status-badge.gotw .status-dot { background: var(--gotw-color); }
+        .status-badge.ready .status-dot { background: var(--ready-color); }
         .status-badge.finish .status-dot { background: #60a5fa; }
 
         /* ===== ACTION ===== */
@@ -1765,12 +1779,12 @@
             color: #c084fc;
         }
         .tracking-badge.gotw {
-            background: rgba(139,92,246,0.15);
-            color: #a78bfa;
+            background: var(--gotw-bg);
+            color: var(--gotw-color);
         }
         .tracking-badge.terima {
-            background: rgba(16,185,129,0.15);
-            color: #34d399;
+            background: var(--ready-bg);
+            color: var(--ready-color);
         }
         .tracking-timeline {
             display: flex;
@@ -1813,12 +1827,12 @@
             color: #c084fc;
         }
         .tracking-item .tracking-icon.gotw {
-            background: rgba(139,92,246,0.15);
-            color: #a78bfa;
+            background: var(--gotw-bg);
+            color: var(--gotw-color);
         }
         .tracking-item .tracking-icon.terima {
-            background: rgba(16,185,129,0.15);
-            color: #34d399;
+            background: var(--ready-bg);
+            color: var(--ready-color);
         }
         .tracking-item .tracking-content {
             flex: 1;
@@ -2897,8 +2911,8 @@
         var STATUS_MAP = {
             'PENDING': { label: 'PENDING', icon: 'fa-clock', class: 'pending', color: '#f87171' },
             'PROSES': { label: 'PROSES', icon: 'fa-spinner', class: 'proses', color: '#c084fc' },
-            'GOTW': { label: 'GOTW', icon: 'fa-truck', class: 'gotw', color: '#a78bfa' },
-            'TERIMA': { label: 'TERIMA', icon: 'fa-check-circle', class: 'terima', color: '#34d399' }
+            'GOTW': { label: 'GOTW', icon: 'fa-truck', class: 'gotw', color: '#fbbf24' },
+            'TERIMA': { label: 'TERIMA', icon: 'fa-check-circle', class: 'terima', color: '#10b981' }
         };
 
         // ===== INDEXEDDB =====
@@ -3427,7 +3441,7 @@
             }
         }
 
-        // ===== addTrackingUpdate - MODIFIED: auto set status to READY when TERIMA =====
+        // ===== addTrackingUpdate - auto set status to READY when TERIMA =====
         function addTrackingUpdate() {
             if (!isAdmin) {
                 showToast('Hanya Admin yang bisa menambah tracking.', 'warning');
@@ -3471,7 +3485,7 @@
                 'tracking': JSON.stringify(currentData)
             };
 
-            // ⭐ KUNCI: Jika status tracking = TERIMA, maka ubah status utama order menjadi READY
+            // Jika status tracking = TERIMA, ubah status utama order menjadi READY
             if (status === 'TERIMA') {
                 updateData['STATUS'] = 'READY';
             }
@@ -3498,7 +3512,7 @@
             });
         }
 
-        // ===== removeTrackingUpdate (unchanged) =====
+        // ===== removeTrackingUpdate =====
         function removeTrackingUpdate(index) {
             if (!isAdmin) {
                 showToast('Hanya Admin yang bisa menghapus tracking.', 'warning');
@@ -5138,6 +5152,7 @@
         console.log('🗑️ Hover pesan untuk melihat tombol hapus (Admin only)');
         console.log('❌ Tombol Batal untuk membatalkan upload');
         console.log('🔄 Tracking TERIMA otomatis ubah status order menjadi READY');
+        console.log('🎨 READY = HIJAU | GOTW = warna READY sebelumnya (kuning/emas)');
     </script>
 </body>
 </html>
